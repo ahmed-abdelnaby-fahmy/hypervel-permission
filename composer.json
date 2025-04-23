@@ -1,0 +1,32 @@
+{
+  "name": "aef/hypervel-permission",
+  "description": "Role & Permission management for Hypervel, with cache support",
+  "type": "library",
+  "license": "MIT",
+  "version": "0.1.0",
+  "support": {
+    "issues": "https://github.com/hypervel/components/issues",
+    "source": "https://github.com/hypervel/components"
+  },
+  "jwtors": [
+    {
+      "name": "Ahmed abdelnaby",
+      "email": "ahmedabdelnabyfahmy1@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Hypervel\\Permission\\": "src/"
+    }
+  },
+  "extra": {
+    "hyperf": {
+      "config": "Hypervel\\Permission\\ConfigProvider"
+    }
+  },
+  "require": {
+    "php": ">=8.0",
+    "hypervel/framework": "^0.1.5"
+  },
+  "minimum-stability": "stable"
+}
