@@ -68,15 +68,20 @@ $admin = Role::create(['name' => 'admin']);
 $admin->givePermissionTo(Permission::all());
 ```
 
-## Assigning roles / permissions to users
+## Assigning and Revoking Roles/Permissions
 ```php
 $user = \App\Models\User::find(1);
 
 $user->assignRole('writer', 'admin');
 $user->syncRoles(['writer', 'admin']);
 
+$user->removeRole('admin');
+
 $user->givePermissionTo('publish articles');
 $user->syncPermissions(['edit articles', 'delete articles']);
+
+$user->revokePermissionTo('edit articles');  // Remove single permission
+$user->revokePermissionTo('edit articles', 'delete articles');  // Remove multiple
 ```
 
 ## Checking abilities
