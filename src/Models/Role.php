@@ -21,7 +21,7 @@ class Role extends Model implements RoleContract
      * @param string|null $guardName
      * @return static
      */
-    public static function findByName(string $name, string $guardName = null)
+    public static function findByName(string $name, ?string $guardName = null)
     {
         $guard = $guardName ?? config('auth.defaults.guard');
 
@@ -48,7 +48,7 @@ class Role extends Model implements RoleContract
      * @param string|null $guardName
      * @return mixed
      */
-    public static function findOrCreate(string $name, string $guardName = null): mixed
+    public static function findOrCreate(string $name, ?string $guardName = null): mixed
     {
         $role = Role::where('name', $name)->first();
         if (!$role)
