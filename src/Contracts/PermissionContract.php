@@ -12,5 +12,5 @@ interface PermissionContract
      * @param  string|null $guardName
      * @return static
      */
-    public static function findByName(string $name, string $guardName = null);
+    public static function findByName(string $name, ?string $guardName = null);
 }

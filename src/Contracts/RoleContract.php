@@ -11,7 +11,7 @@ interface RoleContract
      * @param string|null $guardName
      * @return mixed
      */
-    public static function findOrCreate(string $name,string $guardName = null): mixed;
+    public static function findOrCreate(string $name, ?string $guardName = null): mixed;
 
     /**
      * Find a role by its name and (optional) guard.
@@ -20,5 +20,5 @@ interface RoleContract
      * @param string|null $guardName
      * @return static
      */
-    public static function findByName(string $name, string $guardName = null);
+    public static function findByName(string $name, ?string $guardName = null);
 }
