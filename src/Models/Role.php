@@ -30,6 +30,13 @@ class Role extends Model implements RoleContract
             ->first();
     }
 
+    public function boot(): void
+    {
+        static::registerCallback('creating', function ($model) {
+            $model->guard_name = !empty($model->guard_name) ? $model->guard_name : config('auth.defaults.guard');
+        });
+    }
+
     /**
      * Permissions that belong to this role.
      */
@@ -50,9 +57,23 @@ class Role extends Model implements RoleContract
      */
     public static function findOrCreate(string $name, string $guardName = null): mixed
     {
-        $role = Role::where('name', $name)->first();
+        $guardName = $guardName ?? config('auth.defaults.guard');
+        $role = Role::where('name', $name)->where('guard_name', $guardName)->first();
         if (!$role)
             $role = Role::create(['name' => $name, 'guard_name' => $guardName]);
         return $role;
+    }
+
+    /**
+     * @param string $name
+     * @param string|null $guardName
+     * @return mixed
+     */
+    public static function findOrFail(string $name, string $guardName = null): mixed
+    {
+        $guardName = $guardName ?? config('auth.defaults.guard');
+        return Role::where('name', $name)
+            ->where('guard_name', $guardName)
+            ->firstOrFail();
     }
 }

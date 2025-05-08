@@ -125,13 +125,13 @@ class PermissionRegistrar
     /**
      * Clear cache for a specific user.
      */
-    public function clearUserPermissionCache(): void
+    public function clearUserPermissionCache(int $userId = null): void
     {
         if (!$this->cacheEnabled) {
             return;
         }
 
-        $cacheKey = $this->getUserPermissionsCacheKey();
+        $cacheKey = $this->getUserPermissionsCacheKey($userId);
         Cache::store($this->cacheStore)->forget($cacheKey);
     }
 
@@ -154,9 +154,10 @@ class PermissionRegistrar
     /**
      * Cache key for user permissions.
      */
-    protected function getUserPermissionsCacheKey(): string
+    protected function getUserPermissionsCacheKey(int $userId = null): string
     {
-        $guardName = $guardName ?? auth()->getDefaultDriver();
-        return $this->cacheKey . '.user.' . auth()->user()->id . '.' . $guardName;
+        $guardName = auth()->getDefaultDriver();
+        $userId = $userId ?? auth()->user()->id;
+        return $this->cacheKey . '.user.' . $userId . '.' . $guardName;
     }
 }

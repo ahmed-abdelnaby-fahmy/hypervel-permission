@@ -55,18 +55,9 @@ trait HasRoles
      */
     public function assignRole(...$roles): self
     {
-        $roles = collect($roles)
-            ->flatten()
-            ->map(function ($role) {
-                if (is_string($role)) {
-                    return Role::findOrCreate($role, auth()->getDefaultDriver());
-                }
-                return $role;
-            })
-            ->pluck('id')
-            ->all();
+        $roleIds = $this->getRolesIds($roles);
 
-        $this->roles()->syncWithoutDetaching($roles);
+        $this->roles()->syncWithoutDetaching($roleIds);
         app(PermissionRegistrar::class)->clearCache();
 
         return $this;
@@ -77,21 +68,43 @@ trait HasRoles
      */
     public function removeRole(...$roles): self
     {
-        $roles = collect($roles)
-            ->flatten()
-            ->map(function ($role) {
-                if (is_string($role)) {
-                    return Role::findByName($role, auth()->getDefaultDriver());
-                }
-                return $role;
-            })
-            ->pluck('id')
-            ->all();
+        $roleIds = $this->getRolesIds($roles);
 
-        $this->roles()->detach($roles);
+        $this->roles()->detach($roleIds);
         app(PermissionRegistrar::class)->clearCache();
 
         return $this;
+    }
+
+    /**
+     * Convert the given roles to an array of role IDs.
+     *
+     * @param array $roles
+     * @return array
+     */
+    protected function getRolesIds(array $roles): array
+    {
+        return collect($roles)
+            ->flatten()
+            ->map(function ($role) {
+                return $this->getStoredRole($role);
+            })
+            ->pluck('id')
+            ->all();
+    }
+
+    /**
+     * Get a role instance from various input formats.
+     *
+     * @param mixed $role
+     * @return Role
+     */
+    protected function getStoredRole(mixed $role): Role
+    {
+        if (is_string($role)) {
+            return Role::findOrFail($role, auth()->getDefaultDriver());
+        }
+        return $role;
     }
 
     /**
@@ -176,5 +189,12 @@ trait HasRoles
     protected function getGuardName(): string
     {
         return $this->guard_name ?? auth()->getDefaultDriver();
+    }
+
+    public function boot(): void
+    {
+        static::registerCallback('deleting', function ($model) {
+            $model->roles()->detach();
+        });
     }
 }
