@@ -69,7 +69,7 @@ class Role extends Model implements RoleContract
      * @param string|null $guardName
      * @return mixed
      */
-    public static function findOrFail(string $name, string $guardName = null): mixed
+    public static function findOrFail(string $name, ?string $guardName = null): mixed
     {
         $guardName = $guardName ?? config('auth.defaults.guard');
         return Role::where('name', $name)

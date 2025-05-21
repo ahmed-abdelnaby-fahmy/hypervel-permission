@@ -125,7 +125,7 @@ class PermissionRegistrar
     /**
      * Clear cache for a specific user.
      */
-    public function clearUserPermissionCache(int $userId = null): void
+    public function clearUserPermissionCache(?int $userId = null): void
     {
         if (!$this->cacheEnabled) {
             return;
@@ -154,7 +154,7 @@ class PermissionRegistrar
     /**
      * Cache key for user permissions.
      */
-    protected function getUserPermissionsCacheKey(int $userId = null): string
+    protected function getUserPermissionsCacheKey(?int $userId = null): string
     {
         $guardName = auth()->getDefaultDriver();
         $userId = $userId ?? auth()->user()->id;
