@@ -26,7 +26,7 @@
   },
   "require": {
     "php": ">=8.0",
-    "hypervel/framework": "^0.1.5"
+    "hypervel/framework": "^0.2"
   },
   "minimum-stability": "stable"
 }
